@@ -2,7 +2,7 @@ import React from "react";
 import loadingIcon from "../asset/loading.svg";
 import movieBoss from "../asset/movieboss.png";
 import sendButton from "../asset/send-btn-icon.png";
-import Process from "../env";
+import process from "../env";
 
 interface FormElements extends HTMLFormControlsCollection {
   text: HTMLInputElement;
@@ -16,8 +16,10 @@ const Main = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [response, setResponse] = React.useState<string>("");
 
-  const apiKey = Process?.env?.REACT_APP_API_KEY;
-  const url = Process?.env?.REACT_APP_URL;
+  const apiKey = process?.env?.REACT_APP_API_KEY;
+  const url = process?.env?.REACT_APP_URL;
+
+  console.log({ apiKey, url });
 
   const fetchTextCompletion = async (text: string) => {
     await fetch(url, {
@@ -56,7 +58,7 @@ const Main = () => {
       {/* <!-- The Setup -->	 */}
       <section id="setup-container">
         <div className="setup-inner">
-          <img src={movieBoss} />
+          <img src={movieBoss} alt="" />
           <div className="speech-bubble-ai" id="speech-bubble-ai">
             {!loading && !response?.length ? (
               <p id="movie-boss-text">
@@ -104,9 +106,9 @@ const Main = () => {
       {/* <!-- The Output -->	 */}
       <section className="output-container" id="output-container">
         <div id="output-img-container" className="output-img-container"></div>
-        <h1 id="output-title"></h1>
-        <h2 id="output-stars"></h2>
-        <p id="output-text"></p>
+        <h1 id="output-title">{}</h1>
+        <h2 id="output-stars">{}</h2>
+        <p id="output-text">{}</p>
       </section>
     </main>
   );
