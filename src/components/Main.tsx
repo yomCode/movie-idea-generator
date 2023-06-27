@@ -2,7 +2,8 @@ import React from "react";
 import loadingIcon from "../asset/loading.svg";
 import movieBoss from "../asset/movieboss.png";
 import sendButton from "../asset/send-btn-icon.png";
-import process from "../env";
+import Process from "../env";
+import { Configuration, OpenAIApi } from "openai";
 
 interface FormElements extends HTMLFormControlsCollection {
   text: HTMLInputElement;
@@ -16,31 +17,25 @@ const Main = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [response, setResponse] = React.useState<string>("");
 
-  const apiKey = process?.env?.REACT_APP_API_KEY;
-  const url = process?.env?.REACT_APP_URL;
+  const apiKey = Process?.env?.REACT_APP_API_KEY;
+  //   const url = Process?.env?.REACT_APP_URL;
 
-  console.log({ apiKey, url });
+  const configuration = new Configuration({
+    apiKey: apiKey,
+  });
+
+  const openai = new OpenAIApi(configuration);
 
   const fetchTextCompletion = async (text: string) => {
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-
-      body: JSON.stringify({
+    try {
+      const response: any = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: text,
-        max_tokens: 60,
-        temperature: 0.9,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log({ data });
-        setResponse(data.choices[0].text.trim());
       });
+      setResponse(response?.data?.choices[0]?.text?.trim());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSend = (e: React.FormEvent<IdeaDescription>) => {
