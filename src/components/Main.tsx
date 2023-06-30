@@ -2,7 +2,6 @@ import React from "react";
 import loadingIcon from "../asset/loading.svg";
 import movieBoss from "../asset/movieboss.png";
 import sendButton from "../asset/send-btn-icon.png";
-import Process from "../env";
 import { Configuration, OpenAIApi } from "openai";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -22,8 +21,9 @@ const Main = () => {
   const [imageUrl, setImageUrl] = React.useState<string>("");
   const [showPitch, setShowPitch] = React.useState<boolean>(false);
 
-  const apiKey = Process?.env?.REACT_APP_API_KEY;
-  //   const url = Process?.env?.REACT_APP_URL;
+  const apiKey = process.env.REACT_APP_API_KEY;
+
+  console.log({ apiKey });
 
   const configuration = new Configuration({
     apiKey: apiKey,
