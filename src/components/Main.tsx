@@ -23,8 +23,6 @@ const Main = () => {
 
   const apiKey = process.env.REACT_APP_API_KEY;
 
-  console.log({ apiKey });
-
   const configuration = new Configuration({
     apiKey: apiKey,
   });
@@ -188,9 +186,6 @@ const Main = () => {
     generateImagePrompt(title, synopsis);
     e.currentTarget.elements.text.value = "";
   };
-
-  console.log({ imageUrl });
-  console.log({ loading });
 
   return (
     <main>
