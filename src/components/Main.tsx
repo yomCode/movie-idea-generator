@@ -83,7 +83,6 @@ const Main = () => {
       fetchCast(synopsis);
       fetchTitle(synopsis);
       setSynopsis(synopsis);
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -169,12 +168,13 @@ const Main = () => {
   const fetchImageUrl = async (imagePrompt: string) => {
     try {
       const response: any = await openai.createImage({
-        prompt: `${imagePrompt}. There should be no text on this image.`,
+        prompt: `${imagePrompt}. There should be no text on this image and also be mindful of the character gender to appear on the image`,
         n: 1,
         size: "256x256",
         response_format: "b64_json",
       });
       setImageUrl(response.data.data[0].b64_json);
+      imageUrl?.length > 0 && setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -188,6 +188,9 @@ const Main = () => {
     generateImagePrompt(title, synopsis);
     e.currentTarget.elements.text.value = "";
   };
+
+  console.log({ imageUrl });
+  console.log({ loading });
 
   return (
     <main>
@@ -213,7 +216,7 @@ const Main = () => {
             </div>
           </div>
           {/* <div className="setup-inner setup-input-container"> */}
-          {!imageUrl?.length ? (
+          {!loading && !imageUrl.length ? (
             <form
               id="setup-input-container"
               onSubmit={handleSend}
@@ -228,17 +231,25 @@ const Main = () => {
                 <img src={sendButton} alt="send" />
               </button>
             </form>
+          ) : !loading && imageUrl.length ? (
+            <div className="setup-inner setup-input-container">
+              <button onClick={() => setShowPitch(!showPitch)}>
+                View Pitch
+              </button>
+            </div>
           ) : (
             <div className="setup-inner setup-input-container">
-              {/* <img
+              <img
                 src={loadingIcon}
                 alt="loading"
                 className="loading"
                 id="loading"
-              /> */}
-              <button onClick={() => setShowPitch(!showPitch)}>
+              />
+
+              {/* In an evil world where the rich feeds on the poor masses to survive. The freedom of the poor masses rest on the shoulder of a young boy */}
+              {/* <button onClick={() => setShowPitch(!showPitch)}>
                 View Pitch
-              </button>
+              </button> */}
             </div>
           )}
           {/* </div> */}
